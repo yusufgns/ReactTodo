@@ -44,6 +44,9 @@ function reducerTodo(todo, action) {
       case 'delete' : {
         return todo.filter(e => e.id !== action.id)
       }
+      default : {
+        throw console.error('Type not found:' + action.type);
+      }
     }
 }
 
