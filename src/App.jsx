@@ -1,9 +1,20 @@
+import {useReducer, useState} from 'react'
+
+import Header from './components/Header.jsx'
 import ListTodo from './components/ListTodo.jsx'
+import {MainContext} from './context.jsx'
 import TodoAdd from './components/TodoAdd.jsx'
-import {useReducer} from 'react'
 
 export default function TodosApp() {
     const [todo, dispatch] = useReducer(reducerTodo, initialTasks)
+    const [methods, setMethods] = useState({})
+
+    const appendsMethods = (newMethods) => {
+      setMethods({
+        ...methods,
+        ...newMethods
+      })
+    }
 
     function handleAddTodo(text) {
       dispatch({
@@ -20,12 +31,24 @@ export default function TodosApp() {
       })
     }
     
+    const props = {
+        todo, 
+        handleAddTodo, 
+        handleDeleteTodo,
+        appendsMethods,
+        ...methods,
+    }
+
+    
+
     return (
-        <div className='bg-blue-50 flex items-center flex-col h-screen pt-[200px]'>
-          <h1 className='font-medium mb-[25px] text-[30px]'>Todo List</h1>
-          <TodoAdd onAddTodo={handleAddTodo}></TodoAdd>
-          <ListTodo todo={todo} onDeleteTodo={handleDeleteTodo}></ListTodo>
-        </div>
+        <MainContext.Provider value={props}>
+            <div className='bg-blue-50 flex items-center flex-col h-screen pt-[200px]'>
+              <Header></Header>
+              <TodoAdd></TodoAdd>
+              <ListTodo></ListTodo>
+            </div>
+        </MainContext.Provider>
     )
 }
 
